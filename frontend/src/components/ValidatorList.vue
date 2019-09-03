@@ -6,6 +6,11 @@
         <md-table-cell md-label="Public Key">{{ item.pub_key.value }}</md-table-cell>
         <md-table-cell md-label="Voting Power">{{ item.voting_power }}</md-table-cell>
         <md-table-cell md-label="Proposer Priority">{{ item.proposer_priority }}</md-table-cell>
+        <md-table-cell>
+          <md-button class="md-just-icon md-simple md-primary">
+            <md-icon>edit</md-icon>
+          </md-button>
+        </md-table-cell>
       </md-table-row>
     </md-table>
   </div>

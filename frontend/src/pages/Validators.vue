@@ -14,7 +14,6 @@
     </div>
   </div>
 </template>
-<style lang="scss"></style>
 <script>
   import ValidatorList from '@/components/ValidatorList'
 
