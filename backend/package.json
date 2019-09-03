@@ -1,0 +1,15 @@
+{
+  "name": "stakewithus-fs-test-server",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "description": "Stakewithus FS test server",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "csvjson": "^5.1.0",
+    "http-errors": "^1.7.3",
+    "supertest": "^3.0.0"
+  }
+}

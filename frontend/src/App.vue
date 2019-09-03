@@ -1,0 +1,42 @@
+<template>
+  <div id="app">
+    <router-view/>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App'
+}
+</script>
+
+<style>
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
+
+  .md-table-head {
+    text-align: center;
+  }
+  .md-table-head-label {
+    font-weight: bold;
+  }
+  .md-table-row {
+    cursor: pointer;
+  }
+  .md-table-cell {
+    word-break: break-word;
+  }
+  .md-table-cell-container {
+    font-size: 11px;
+    text-align: left;
+  }
+  .logo {
+    display: flex;
+  }
+</style>
