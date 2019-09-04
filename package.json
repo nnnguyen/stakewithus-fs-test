@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "frontend": "cd frontend && npm run start",
-    "backend": "cd backend && nodemon src/app.js",
+    "backend": "cd backend && nodemon --inspect src/app.js",
     "start": "concurrently --kill-others-on-fail \"npm run backend\" \"npm run frontend\"",
     "test": "npm run test -C frontend -- --watchAll=false && npm run test -C backend -- --watchAll=false"
   },

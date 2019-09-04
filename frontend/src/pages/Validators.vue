@@ -7,7 +7,7 @@
             <h4 class="title">Validators</h4>
           </md-card-header>
           <md-card-content>
-            <validator-list></validator-list>
+            <router-view></router-view>
           </md-card-content>
         </md-card>
       </div>
@@ -15,11 +15,5 @@
   </div>
 </template>
 <script>
-  import ValidatorList from '@/components/ValidatorList'
-
-  export default {
-    components: {
-      ValidatorList
-    }
-  }
+  export default {}
 </script>
