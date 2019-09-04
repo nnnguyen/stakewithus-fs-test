@@ -63,6 +63,7 @@ app.post('/api/v1/validator/create', (req, res) => {
         var json = JSON.parse(data);
         if(json) {
             var validators = json;
+            
             var existValidator = validators.find(v => {
                 return v.address === req.params.address || v.pub_key.value === req.body.publicKey;
             });
@@ -79,6 +80,12 @@ app.post('/api/v1/validator/create', (req, res) => {
                 };
 
                 validators.push(validator);
+                fs.writeFile('../data/validators.json', JSON.stringify(validators, null, 4), function(err) {
+                    if (err) {
+                        console.error(err);
+                        throw err;
+                    }
+                });
                 res.send(validators);
             }
         } else {

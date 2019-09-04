@@ -1,19 +1,19 @@
 <template>
-  <div class="validator-edit">
-    <form @submit.prevent="editValidator">
+  <div class="validator-create">
+    <form @submit.prevent="createValidator">
       <md-card>
         <md-card-content>
           <div class="md-layout">
             <div class="md-layout-item md-small-size-100 md-size-33">
               <md-field>
                 <label>Address</label>
-                <md-input v-model="validator.validatorAddress" type="text" disabled></md-input>
+                <md-input id="validatorAddress" name="validatorAddress" v-model="validator.validatorAddress" type="text"></md-input>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100 md-size-33">
               <md-field>
                 <label>Public Key</label>
-                <md-input v-model="validator.publicKey" type="text" disabled></md-input>
+                <md-input id="publicKey" name="publicKey" v-model="validator.publicKey" type="text"></md-input>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100 md-size-33">
@@ -30,7 +30,7 @@
             </div>
             <div class="md-layout-item md-size-100 text-right">
               <md-button class="md-primary" @click="resetForm">Reset</md-button>
-              <md-button type="submit" class="md-raised md-success">Save</md-button>
+              <md-button type="submit" class="md-raised md-success" >Save</md-button>
             </div>
           </div>
         </md-card-content>
@@ -40,53 +40,30 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import Validator from '@/models/Validator';
 
   export default {
-    name: "ValidatorEdit",
+    name: "ValidatorCreate",
     data() {
       return {
-        validator: new Validator(),
-        originalValidator: new Validator()
+        validator: new Validator()
       }
     },
-    created: function() {
-      this.getValidator();
-    },
     methods: {
-      getValidator: function() {
+      createValidator: function() {
         var validatorAddress = this.$route.params.address;
-        this.$http.get('http://localhost:5000/api/v1/validator/' + validatorAddress, {
-          headers : {
-            'Content-Type' : 'application/json'
-          }
-        }).then(response => {
-          console.log(response.data);
-          this.validator = new Validator();
-          this.validator.validatorAddress = validatorAddress;
-          this.validator.publicKey = response.data.pub_key.value;
-          this.validator.validatorIndex = response.data.proposer_priority;
-          this.validator.votingPower = response.data.voting_power;
-
-          this.originalValidator = {...this.validator};
-        })
-      },
-      editValidator: function() {
-        var validatorAddress = this.$route.params.address;
-        this.$http.patch('http://localhost:5000/api/v1/validator/edit/' + validatorAddress, this.validator, {
+        this.$http.post('http://localhost:5000/api/v1/validator/create', this.validator, {
           headers : {
             'Content-Type' : 'application/json'
           }
         }).then((response) => {
           this.$router.push({name: 'Validator List'});
-          this.originalValidator = {...this.validator};
         }, (error) => {
           console.log(error);
         })
       },
       resetForm: function() {
-        this.validator = {...this.originalValidator};
+        this.validator = new Validator();
       }
     }
   }

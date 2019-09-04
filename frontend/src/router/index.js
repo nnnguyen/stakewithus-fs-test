@@ -5,6 +5,7 @@ import DefaultLayout from '@/pages/layouts/DefaultLayout';
 import Home from '@/pages/Home';
 import Validators from '@/pages/Validators';
 import ValidatorList from '@/components/ValidatorList';
+import CreateValidator from '@/components/CreateValidator';
 import EditValidator from '@/components/EditValidator';
 
 Vue.use(Router);
@@ -30,6 +31,11 @@ export default new Router({
               path: '/list',
               name: 'Validator List',
               component: ValidatorList
+            },
+            {
+              path: '/create-validator',
+              name: 'Create Validator',
+              component: CreateValidator
             },
             {
               path: '/edit-validator/:address',

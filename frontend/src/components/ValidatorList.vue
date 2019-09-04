@@ -1,5 +1,7 @@
 <template>
   <div class="validators">
+    <p><router-link :to="{ name: 'Create Validator' }" class="btn btn-primary">Create Validator</router-link></p>
+
     <md-table v-model="validators" :table-header-color="tableHeaderColor">
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-label="Address">{{ item.validatorAddress }}</md-table-cell>
@@ -7,9 +9,8 @@
         <md-table-cell md-label="Voting Power">{{ item.votingPower }}</md-table-cell>
         <md-table-cell md-label="Proposer Priority">{{ item.validatorIndex }}</md-table-cell>
         <md-table-cell>
-          <md-button class="md-just-icon md-simple md-primary">
-            <!--<md-icon>edit</md-icon>-->
-            <router-link :to="{name: 'Edit Validator', params: { address: item.validatorAddress }}" class="btn btn-primary">Edit</router-link>
+          <md-button class="md-just-icon md-simple md-primary" :to="{name: 'Edit Validator', params: { address: item.validatorAddress }}">
+            <md-icon>edit</md-icon>
           </md-button>
         </md-table-cell>
       </md-table-row>
