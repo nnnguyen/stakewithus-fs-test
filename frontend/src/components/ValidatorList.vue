@@ -1,20 +1,31 @@
 <template>
   <div class="validators">
-    <p><router-link :to="{ name: 'Create Validator' }" class="btn btn-primary">Create Validator</router-link></p>
-
-    <md-table v-model="validators" :table-header-color="tableHeaderColor">
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="Address">{{ item.validatorAddress }}</md-table-cell>
-        <md-table-cell md-label="Public Key">{{ item.publicKey }}</md-table-cell>
-        <md-table-cell md-label="Voting Power">{{ item.votingPower }}</md-table-cell>
-        <md-table-cell md-label="Proposer Priority">{{ item.validatorIndex }}</md-table-cell>
-        <md-table-cell>
-          <md-button class="md-just-icon md-simple md-primary" :to="{name: 'Edit Validator', params: { address: item.validatorAddress }}">
-            <md-icon>edit</md-icon>
-          </md-button>
-        </md-table-cell>
-      </md-table-row>
-    </md-table>
+    <md-card>
+      <md-card-content>
+        <div class="md-layout">
+          <div class="md-layout-item md-small-size-100 md-size-100">
+            <md-button class="md-simple md-primary md-size-100" :to="{name: 'Create Validator'}">
+              <md-icon>create</md-icon>
+            </md-button>
+          </div>
+          <div class="md-layout-item md-small-size-100 md-size-100">
+            <md-table v-model="validators" :table-header-color="tableHeaderColor">
+              <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-cell md-label="Address">{{ item.validatorAddress }}</md-table-cell>
+                <md-table-cell md-label="Public Key">{{ item.publicKey }}</md-table-cell>
+                <md-table-cell md-label="Voting Power">{{ item.votingPower }}</md-table-cell>
+                <md-table-cell md-label="Proposer Priority">{{ item.validatorIndex }}</md-table-cell>
+                <md-table-cell>
+                  <md-button class="md-simple md-primary" :to="{name: 'Edit Validator', params: { address: item.validatorAddress }}">
+                    <md-icon>edit</md-icon>
+                  </md-button>
+                </md-table-cell>
+              </md-table-row>
+            </md-table>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
   </div>
 </template>
 

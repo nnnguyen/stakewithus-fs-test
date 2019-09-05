@@ -17,15 +17,19 @@
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100 md-size-33">
-              <md-field>
+              <md-field :class="getValidationClass('validatorIndex')">
                 <label>Validator Index</label>
                 <md-input id="validatorIndex" name="validatorIndex" v-model="validator.validatorIndex" type="text"></md-input>
+                <span class="md-error" v-if="!$v.validator.validatorIndex.required">Validator Index is required</span>
+                <span class="md-error" v-else-if="!$v.validator.validatorIndex.maxlength">Max length is 19 characters</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100 md-size-50">
-              <md-field>
+              <md-field :class="getValidationClass('votingPower')">
                 <label>Voting Power</label>
                 <md-input id="votingPower" name="votingPower" v-model="validator.votingPower" type="text"></md-input>
+                <span class="md-error" v-if="!$v.validator.votingPower.required">Voting Power is required</span>
+                <span class="md-error" v-else-if="!$v.validator.votingPower.maxlength">Max length is 17 characters</span>
               </md-field>
             </div>
             <div class="md-layout-item md-size-100 text-right">
@@ -41,6 +45,7 @@
 
 <script>
   import axios from 'axios';
+  import { required, maxLength } from 'vuelidate/lib/validators';
   import Validator from '@/models/Validator';
 
   export default {
@@ -49,6 +54,18 @@
       return {
         validator: new Validator(),
         originalValidator: new Validator()
+      }
+    },
+    validations: {
+      validator: {
+        validatorIndex: {
+          required,
+          maxLength: maxLength(19)
+        },
+        votingPower: {
+          required,
+          maxLength: maxLength(17)
+        }
       }
     },
     created: function() {
@@ -73,6 +90,9 @@
         })
       },
       editValidator: function() {
+        this.$v.validator.$touch();
+        if(this.$v.validator.$error) return;
+
         var validatorAddress = this.$route.params.address;
         this.$http.patch('http://localhost:5000/api/v1/validator/edit/' + validatorAddress, this.validator, {
           headers : {
@@ -87,6 +107,14 @@
       },
       resetForm: function() {
         this.validator = {...this.originalValidator};
+      },
+      getValidationClass: function(fieldName) {
+        const field = this.$v.validator[fieldName];
+        if (field) {
+          return {
+            'md-invalid': field.$invalid && field.$dirty
+          }
+        }
       }
     }
   }
