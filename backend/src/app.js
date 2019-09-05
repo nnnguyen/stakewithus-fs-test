@@ -195,6 +195,10 @@ app.get('/api/v1/hello', (req, res) => {
 app.get('/api/v1/validators', (req, res) => {
     res.type('application/json');
 
+    // var getValidatorListFromFile((results) => {
+    //     res.json(results);
+    // });
+
     getValidatorListFromDB((results) => {
         res.json(results);
     });
@@ -203,6 +207,9 @@ app.get('/api/v1/validators', (req, res) => {
 app.get('/api/v1/validator/:address', (req, res) => {
     res.type('application/json');
 
+    // var getValidatorDetailFromFile(req.params.address, (results) => {
+    //     res.json(results);
+    // });
     getValidatorDetailFromDB(req.params.address, (results) => {
         res.json(results);
     });
