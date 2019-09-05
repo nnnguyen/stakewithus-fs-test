@@ -133,5 +133,59 @@
         },
         "voting_power": "4180308150000000a123",
         "proposer_priority": "41378266209084499001"
+    },
+    {
+        "address": "105851A834330118A7EAF1E778DDFDFDB3BB800G",
+        "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "+D\b6SzWqrgBE0WdRqTFfwjNg0v7mypHMqllCV/zgjRdV="
+        },
+        "voting_power": "1815430500000002",
+        "proposer_priority": "-28471297322249825"
+    },
+    {
+        "address": "105851A834330118A7EAF1E778DGFDFDB3BB800G",
+        "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "+D\b6SzWqKgBE0WdRqTFfwjNg0v7mypHMqllCV/zgjRdV="
+        },
+        "voting_power": "1815430500000034",
+        "proposer_priority": "41378266209084488"
+    },
+    {
+        "address": "105851A834330118A7EAF1E778DGFDFDB3BB800H",
+        "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "+D7SzWqKgBE0WdRqTFfwjNg0v7mypHMqllCV/zgjRdV="
+        },
+        "voting_power": "2815430500000000",
+        "proposer_priority": "-28471297322249826"
+    },
+    {
+        "address": "105851A834330118A7EAF1E778DGFDFDB3BB800P",
+        "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "+D8SzWqKgBE0WdRqTFfwjNg0v7mypHMqllCV/zgjRdV="
+        },
+        "voting_power": "1815430500000321",
+        "proposer_priority": "41378266209084488"
+    },
+    {
+        "address": "105851A834330118A7EAF1E778DGFDFDB3BB800Q",
+        "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "+D9SzWqKgBE0WdRqTFfwjNg0v7mypHMqllCV/zgjRdV="
+        },
+        "voting_power": "1815430500004321",
+        "proposer_priority": "41378266209084477"
+    },
+    {
+        "address": "105851A834330118A7EAF1E778DGFDFDB3BB800K",
+        "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "+D10zWqKgBE0WdRqTFfwjNg0v7mypHMqllCV/zgjRdV="
+        },
+        "voting_power": "1815430500054321",
+        "proposer_priority": "41378266209084466"
     }
 ]

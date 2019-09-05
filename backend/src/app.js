@@ -125,16 +125,13 @@ var getValidatorListFromDB = (callback) => {
                         };
 
                         var pubKey = pubKeys.find(p => {
-                            console.log(parseInt(p.validator_id) === parseInt(v.id));
                             return parseInt(p.validator_id) === parseInt(v.id);
                         });
-                        console.log(pubKey);
 
                         if(pubKey) {
                             v.pub_key.type = pubKey.type;
                             v.pub_key.value = pubKey.value;
                         }
-                        console.log(v);
                     });
 
                     if(callback) {
@@ -167,7 +164,6 @@ var getValidatorDetailFromDB = (validatorAddress, callback) => {
                         };
 
                         var pubKey = pubKeys.find(p => {
-                            console.log(parseInt(p.validator_id) === parseInt(validator.id));
                             return parseInt(p.validator_id) === parseInt(validator.id);
                         });
 
@@ -186,6 +182,32 @@ var getValidatorDetailFromDB = (validatorAddress, callback) => {
         })
 }
 
+var insertValidatorIntoDB = (validator, callback) => {
+    pool.query('INSERT INTO validator (address, voting_power, proposer_priority) VALUES ($1, $2, $3) RETURNING id',
+        [validator.validatorAddress, validator.votingPower, validator.validatorIndex], (error, result) => {
+
+        if (error) {
+            throw error;
+        }
+        if(callback) {
+            callback(result.rows[0].id);
+        }
+    });
+
+}
+
+var insertPublicKeyIntoDB = (publicKey, callback) => {
+    pool.query('INSERT INTO pub_key (type, value, validator_id) VALUES ($1, $2, $3) RETURNING id',
+        [publicKey.type, publicKey.value, publicKey.validatorId], (error, result) => {
+
+            if (error) {
+                throw error;
+            }
+            if(callback) {
+                callback(result.rows[0].id);
+            }
+        });
+}
 
 /******************************** APIs ********************************/
 app.get('/api/v1/hello', (req, res) => {
@@ -217,10 +239,22 @@ app.get('/api/v1/validator/:address', (req, res) => {
 
 app.post('/api/v1/validator/create', (req, res) => {
     res.type('application/json');
-    console.log(req.body);
-    createValidatorToFile(req.body, (results) => {
-        res.json(results);
 
+    // createValidatorToFile(req.body, (results) => {
+    //     res.json(results);
+    //
+    // });
+
+    insertValidatorIntoDB(req.body, function(rsValidator) {
+        var pubKey = {
+            type: 'tendermint/PubKeyEd25519',
+            value: req.body.publicKey,
+            validatorId: rsValidator
+        };
+
+        insertPublicKeyIntoDB(pubKey, function(rsPublicKey) {
+            res.json(rsPublicKey.insertId);
+        });
     });
 });
 
