@@ -57,16 +57,43 @@ var getValidatorDetailFromFile = (validatorAddress, callback) => {
     });
 }
 
-var createValidatorListToFile = (callback) => {
+var createValidatorToFile = (inputValidator, callback) => {
     fs.readFile('../data/validators.json', 'utf8', (err, data) => {
+
         if (err) {
             console.error(err);
             throw err;
         }
-
         var json = JSON.parse(data);
+        var validators = json;
+
+        if(validators) {
+            var existValidator = validators.find(v => {
+                return v.address === inputValidator.validatorAddress || v.pub_key.value === inputValidator.publicKey;
+            });
+
+            if(!existValidator) {
+                var validator = {
+                    address: inputValidator.validatorAddress,
+                    pub_key: {
+                        type: 'tendermint/PubKeyEd25519',
+                        value: inputValidator.publicKey
+                    },
+                    voting_power: inputValidator.votingPower,
+                    proposer_priority: inputValidator.validatorIndex
+                };
+
+                validators.push(validator);
+                fs.writeFile('../data/validators.json', JSON.stringify(validators, null, 4), function(err) {
+                    if (err) {
+                        console.error(err);
+                        throw err;
+                    }
+                });
+            }
+        }
         if(callback) {
-            callback(json);
+            callback(validators);
         }
     });
 }
@@ -132,7 +159,7 @@ var getValidatorDetailFromDB = (validatorAddress, callback) => {
                         if (error) {
                             throw error;
                         }
-                        
+
                         var pubKeys = rs.rows;
                         validator.pub_key = {
                             type: null,
@@ -182,44 +209,11 @@ app.get('/api/v1/validator/:address', (req, res) => {
 });
 
 app.post('/api/v1/validator/create', (req, res) => {
-    fs.readFile('../data/validators.json', 'utf8', (err, data) => {
-        res.type('application/json');
+    res.type('application/json');
+    console.log(req.body);
+    createValidatorToFile(req.body, (results) => {
+        res.json(results);
 
-        if (err) {
-            console.error(err);
-            throw err;
-        }
-        var json = JSON.parse(data);
-        if(json) {
-            var validators = json;
-
-            var existValidator = validators.find(v => {
-                return v.address === req.params.address || v.pub_key.value === req.body.publicKey;
-            });
-
-            if(!existValidator) {
-                var validator = {
-                    address: req.body.validatorAddress,
-                    pub_key: {
-                        type: 'tendermint/PubKeyEd25519',
-                        value: req.body.publicKey
-                    },
-                    voting_power: req.body.votingPower,
-                    proposer_priority: req.body.validatorIndex
-                };
-
-                validators.push(validator);
-                fs.writeFile('../data/validators.json', JSON.stringify(validators, null, 4), function(err) {
-                    if (err) {
-                        console.error(err);
-                        throw err;
-                    }
-                });
-                res.send(validators);
-            }
-        } else {
-            res.send(null);
-        }
     });
 });
 
