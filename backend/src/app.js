@@ -98,6 +98,44 @@ var createValidatorToFile = (inputValidator, callback) => {
     });
 }
 
+var updateValidatorInFile = (validatorAddress, updatedValidator, callback) => {
+    fs.readFile('../data/validators.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            throw err;
+        }
+        var json = JSON.parse(data);
+        var validators = json;
+
+        if(validators) {
+            for(var i = 0; i < validators.length; i++) {
+                var validator = validators[i];
+
+                if(validator.address === validatorAddress && validatorAddress) {
+                    validator.voting_power = updatedValidator.votingPower;
+                    validator.proposer_priority = updatedValidator.validatorIndex;
+
+                    validators.splice(i, 1);
+                    validators.push(validator);
+
+                    fs.writeFile('../data/validators.json', JSON.stringify(validators, null, 4), function(err) {
+                        if (err) {
+                            console.error(err);
+                            throw err;
+                        }
+                    });
+
+                    break;
+                }
+            }
+        }
+
+        if(callback) {
+            callback(validators);
+        }
+    });
+}
+
 /******************************** Do with Postgres DB ********************************/
 var getValidatorListFromDB = (callback) => {
     pool.query('SELECT * FROM validator ORDER BY id ASC',
@@ -209,6 +247,20 @@ var insertPublicKeyIntoDB = (publicKey, callback) => {
         });
 }
 
+var updateValidatorInDB = (validator, callback) => {
+    pool.query('UPDATE validator SET voting_power = $1, proposer_priority = $2 WHERE address = $3',
+        [validator.votingPower, validator.validatorIndex, validator.validatorAddress], (error, result) => {
+
+            if (error) {
+                throw error;
+            }
+            if(callback) {
+                callback(validator.id);
+            }
+        });
+
+}
+
 /******************************** APIs ********************************/
 app.get('/api/v1/hello', (req, res) => {
     res.send({ express: "Hello From Express" });
@@ -253,7 +305,7 @@ app.post('/api/v1/validator/create', (req, res) => {
         };
 
         insertPublicKeyIntoDB(pubKey, function(rsPublicKey) {
-            res.json(rsPublicKey.insertId);
+            res.json(rsPublicKey);
         });
     });
 });
@@ -262,39 +314,14 @@ app.patch('/api/v1/validator/edit/:address', (req, res) => {
     fs.readFile('../data/validators.json', 'utf8', (err, data) => {
         res.type('application/json');
 
-        if (err) {
-            console.error(err);
-            throw err;
-        }
-        var json = JSON.parse(data);
-        if(json) {
-            var validators = json;
+        // updateValidatorInFile(req.params.address, req.body, (results) => {
+        //     res.send(results);
+        // });
 
-            for(var i = 0; i < validators.length; i++) {
-                var validator = validators[i];
+        updateValidatorInDB(req.body, function(rsValidator) {
+            res.json(rsValidator);
+        });
 
-                if(validator.address === req.params.address && req.body) {
-                    validator.voting_power = req.body.votingPower;
-                    validator.proposer_priority = req.body.validatorIndex;
-
-                    validators.splice(i, 1);
-                    validators.push(validator);
-
-                    fs.writeFile('../data/validators.json', JSON.stringify(validators, null, 4), function(err) {
-                        if (err) {
-                            console.error(err);
-                            throw err;
-                        }
-                    });
-
-                    break;
-                }
-            }
-
-            res.send(validators);
-        } else {
-            res.send(null);
-        }
     });
 });
 
