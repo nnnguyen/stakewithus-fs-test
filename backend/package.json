@@ -5,7 +5,7 @@
   "description": "Stakewithus FS test server",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.16.2"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "csvjson": "^5.1.0",
